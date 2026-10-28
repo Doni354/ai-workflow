@@ -1,82 +1,50 @@
-# doni-ai-workflow
+# doni-ai-workflow — CLI edition
 
-Reusable, modular engineering workflow for Google Antigravity IDE. Designed for both new and existing repositories, with special care for existing files and low-context AI sessions.
+CLI interaktif untuk memasang workflow reusable Antigravity ke proyek baru maupun ongoing. Membutuhkan Node.js 18+.
 
-## Features
-- Workspace or global skill installation.
-- Profiles: `base`, `frontend`, `backend`, `fullstack`.
-- Workspace documentation templates under `docs/ai-workflow/`.
-- Existing-file conflict prompts; no silent overwrites.
-- Backups before replacement.
-- Dry-run mode.
-- Uninstall only removes files recorded in the install manifest and asks before deleting modified files.
-- Ongoing-project onboarding skill audits first; it does not authorize automatic refactors.
+> Nama paket `doni-ai-workflow` masih usulan dan perlu dicek ketersediaannya sebelum publish. Paket ini belum diterbitkan di npm.
 
-## Requirements
-- Windows PowerShell 5.1 or PowerShell 7.
-- Antigravity IDE.
-- Download/clone this repository before running scripts.
-- Review scripts before running them.
-
-## Install into a workspace
+## Coba dari source bundle ini
 
 ```powershell
-.\scripts\install.ps1 -Target "D:\Project\MyApp" -Profile fullstack -Scope workspace -DryRun
-.\scripts\install.ps1 -Target "D:\Project\MyApp" -Profile fullstack -Scope workspace
+node .\bin\doni-ai.js --help
+node .\bin\doni-ai.js init --target "D:\Project\MyApp" --scope workspace --profile fullstack --dry-run
+node .\bin\doni-ai.js init --target "D:\Project\MyApp" --scope workspace --profile fullstack
 ```
 
-For a global installation of reusable skills and global rules:
+## Setelah dipublikasikan ke npm
 
 ```powershell
-.\scripts\install.ps1 -Profile base -Scope global -DryRun
-.\scripts\install.ps1 -Profile base -Scope global
+npm install -g doni-ai-workflow
+cd D:\Project\MyApp
+doni-ai init
+doni-ai init --dry-run
+doni-ai update
+doni-ai uninstall
 ```
 
-Global installs do not install project documentation templates. Workspace scope installs skills, rules, and documentation templates.
+Dari folder proyek saat ini, target otomatis terdeteksi; tidak perlu mengisi path secara manual. Pilih profil dan scope melalui wizard interaktif.
 
-## Profiles
-- `base`: project onboarding, documentation, verification.
-- `frontend`: base + UI implementation.
-- `backend`: base + backend feature workflow.
-- `fullstack`: all included skills.
+## Fitur
+- Scope workspace atau global.
+- Profil `base`, `frontend`, `backend`, `fullstack`.
+- Skills Antigravity di `.agents/skills/` untuk workspace, `~/.gemini/config/skills/` untuk global.
+- Rules dan template dokumentasi untuk workspace.
+- Konflik file selalu ditanyakan; file lama dipertahankan secara default.
+- Backup bertimestamp sebelum mengganti file.
+- `--dry-run`, `update`, `uninstall`, `doctor`.
 
-## Existing projects
-1. Run installer with `-DryRun`.
-2. Review the proposed destinations.
-3. Run without `-DryRun`.
-4. Open the project in Antigravity.
-5. Invoke `/project-onboarding` and request an audit-only pass first.
-6. Review generated docs and commit only what you approve.
+## Keamanan
+- Installer hanya menyalin workflow files; tidak menjalankan AI, mengedit source code aplikasi, install dependency aplikasi, atau deploy.
+- Jalankan `--dry-run` dulu dan review hasilnya.
+- Uninstall hanya mempertimbangkan path yang tercatat di manifest dan meminta konfirmasi per file.
+- Periksa script sebelum digunakan.
 
-The installer never runs AI or edits application source code. It only installs workflow assets. The onboarding skill guides the AI to inspect first and propose changes before applying them.
+## Publish ke npm
+1. Pastikan nama tersedia: `npm view doni-ai-workflow`.
+2. Login: `npm login`.
+3. Dari folder paket, jalankan `npm publish --access public`.
+4. Jangan pernah menerbitkan secrets atau data proyek.
 
-## Updating
-Download the newer repository version and run:
-
-```powershell
-.\scripts\update.ps1 -Target "D:\Project\MyApp" -Profile fullstack -Scope workspace -DryRun
-.\scripts\update.ps1 -Target "D:\Project\MyApp" -Profile fullstack -Scope workspace
-```
-
-The update script uses the same conflict prompts and backups as the installer. Files are not overwritten silently.
-
-## Uninstall
-```powershell
-.\scripts\uninstall.ps1 -Target "D:\Project\MyApp" -Scope workspace -DryRun
-.\scripts\uninstall.ps1 -Target "D:\Project\MyApp" -Scope workspace
-```
-The manifest records files installed by this toolkit. Uninstall skips modified files unless you explicitly approve removal. It does not remove project-generated documentation or source code.
-
-## Paths used
-Antigravity IDE workspace skills: `.agents/skills/<skill-name>/SKILL.md`
-Antigravity IDE global skills: `~/.gemini/config/skills/<skill-name>/SKILL.md`
-Workspace rules: `.agents/rules/*.md`
-Global modular rules: `~/.gemini/config/rules/*.md`
-Workspace docs templates: `docs/ai-workflow/`
-
-## Safety notes
-- Review PowerShell scripts before running them.
-- Start with `-DryRun`.
-- Commit or back up the project before onboarding.
-- Do not put API keys, passwords, tokens, private user data, or production secrets into generated docs.
-- This bundle has not been executed in the user's environment. Verify scripts locally before relying on them.
+## Status
+Source CLI telah dibuat, tetapi belum diuji di Windows/PowerShell pengguna dan belum dipublikasikan ke npm. Uji lokal terlebih dahulu.

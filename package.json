@@ -1,0 +1,11 @@
+{
+  "name": "doni-ai-workflow",
+  "version": "0.1.0",
+  "description": "Reusable AI engineering workflow installer for Google Antigravity projects",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "bin": { "doni-ai": "./bin/doni-ai.js" },
+  "files": ["bin/", "lib/", "skills/", "rules/", "templates/", "README.md", "LICENSE"],
+  "scripts": { "start": "node ./bin/doni-ai.js" }
+}
